@@ -1,0 +1,39 @@
+version: "3.9"
+
+services:
+  db:
+    image: mysql:9.0.1
+    environment:
+      - MYSQL_DATABASE=${MYSQL_USERNAME}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_PASSWORD}
+    ports:
+      - '3306:3306'
+    volumes:
+      - ${VOLUME_DIRECTORY}:/var/lib/mysql
+      - ${VOLUME_DIRECTORY}/init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  web:
+    image: ${APPLICATION_NAME}:latest
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ${LOCAL_DIRECTORY}:/app/public
+      - caddy_data:/data
+      - caddy_config:/config
+    tty: true
+    depends_on:
+      - db
+    environment:
+      DB_HOST: db
+      DB_PORT: 3306
+      DB_USER: ${MYSQL_USERNAME}
+      DB_PASSWORD: ${MYSQL_PASSWORD}
+    links:
+      - db
+      
+
+volumes:
+  caddy_data:
+  caddy_config:
