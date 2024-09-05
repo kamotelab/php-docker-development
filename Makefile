@@ -11,6 +11,9 @@ start:
 	
 stop:
 	docker compose down
-	
+
 sh:
+	${EXEC} -it --user 1000 web bash
+
+root:
 	${EXEC} -it web bash

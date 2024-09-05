@@ -67,10 +67,15 @@ make start
 make stop
 ```
 
-### Login to web container
+### Login to web container as user
 
 ```
 make sh
 ```
 
+### Login to web container as root
+
+```
+make root
+```
 
